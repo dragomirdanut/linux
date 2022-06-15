@@ -1,0 +1,31 @@
+# Pop!_OS 22.04 LTS
+#
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# <file system>  <mount point>  <type>  <options>  <dump>  <pass>
+#
+# EFI
+PARTUUID=fd21a1c2-9a26-4349-af63-950fbd8028cc    /boot/efi     vfat    umask=0077    0    0
+#
+# RECOVERY
+PARTUUID=4588b387-0cf3-4236-ab79-5245c3bebd3c    /recovery     vfat    umask=0077    0    0
+#
+# SWAP
+/dev/mapper/LinuxCryptSwap    none    swap    defaults    0    0
+#
+# ROOT
+UUID=__uuid__    /            btrfs    subvol=/pop-os/@,ssd,noatime,space_cache=v2,commit=120,compress=zstd:15,discard=async,autodefrag   0   0
+#
+# HOME
+UUID=__uuid__    /home        btrfs    subvol=/pop-os/@home,ssd,noatime,space_cache=v2,commit=120,compress=zstd:15,discard=async,autodefrag    0    0
+#
+# BTRFS POOL
+/dev/mapper/LinuxCrypt                       /mnt/btrfs   btrfs    subvolid=5    0    0
+#
+# BACKUP
+/dev/mapper/LinuxCrypt   /mnt/backup-efi       btrfs   subvol=/backup/@backup-efi,ssd,noatime,space_cache=v2,commit=120,compress=zstd:15,discard=async,autodefrag    0    0
+/dev/mapper/LinuxCrypt   /mnt/backup-boot      btrfs   subvol=/backup/@backup-boot,ssd,noatime,space_cache=v2,commit=120,compress=zstd:15,discard=async,autodefrag    0    0

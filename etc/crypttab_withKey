@@ -1,0 +1,2 @@
+LinuxCryptSwap UUID=__uuid__ /dev/urandom swap,plain,offset=1024,cipher=aes-xts-plain64,size=512
+LinuxCrypt UUID=__uuid__ none luks,discard

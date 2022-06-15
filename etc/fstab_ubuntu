@@ -1,0 +1,32 @@
+# Ubuntu 22.04 LTS
+#
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+#
+# ROOT
+/dev/mapper/LinuxCrypt      /                   btrfs   subvol=/ubuntu-lts/@,ssd,noatime,space_cache=v2,commit=120,compress=zstd:15,discard=async,autodefrag    0    0
+#
+# EFI  /boot/efi was on /dev/sda1 during installation
+UUID=32C6-A5BF              /boot/efi           vfat    umask=0077    0    0
+#
+/dev/mapper/LinuxCrypt      /home               btrfs   subvol=/ubuntu-lts/@home,ssd,noatime,space_cache=v2,commit=120,compress=zstd:15,discard=async,autodefrag    0    0
+#
+# SWAP was on /dev/sda3 during installation
+# UUID=05754c07-338e-4c67-8ff5-8900f1445abb      none        swap        sw    0    0
+/dev/mapper/LinuxCryptSwap  none                swap    sw    0    0
+#
+# BTRFS POOL
+/dev/mapper/LinuxCrypt      /mnt/btrfs          btrfs   subvolid=5    0    0
+#
+# BACKUP
+/dev/mapper/LinuxCrypt      /mnt/backup-efi     btrfs   subvol=/backup/@backup-efi,ssd,noatime,space_cache=v2,commit=120,compress=zstd:15,discard=async,autodefrag    0    0
+/dev/mapper/LinuxCrypt      /mnt/backup-boot    btrfs   subvol=/backup/@backup-boot,ssd,noatime,space_cache=v2,commit=120,compress=zstd:15,discard=async,autodefrag    0    0
+#
+# SNAPSHOTS
+/dev/mapper/LinuxCrypt      /.snapshots         btrfs   subvol=/ubuntu-lts/@snapshots,ssd,noatime,space_cache=v2,commit=120,compress=zstd:15,discard=async,autodefrag    0    0
+/dev/mapper/LinuxCrypt      /home/.snapshots    btrfs   subvol=/ubuntu-lts/@home-snapshots,ssd,noatime,space_cache=v2,commit=120,compress=zstd:15,discard=async,autodefrag    0    0
