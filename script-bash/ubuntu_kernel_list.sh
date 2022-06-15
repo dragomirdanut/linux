@@ -11,7 +11,7 @@ while IFS= read -r -u3 -d $'\0' LINE; do
 done 3< <(eval "${FIND}")
 
 echo "KERNEL_LIST = ${KERNEL_LIST[@]}"
-# KERNEL_LIST = ( 5.15.0-35-generic 5.15.0-37-generic )
+# KERNEL_LIST = ( vmlinuz-5.15.0-35-generic vmlinuz-5.15.0-37-generic )
 
 
 # There has to be at least one kernel.
