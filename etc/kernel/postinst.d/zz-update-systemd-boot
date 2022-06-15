@@ -1,0 +1,69 @@
+#!/bin/bash
+#
+# This is a simple kernel hook to populate the systemd-boot entries
+# whenever kernels are added or removed.
+#
+
+# The UUID of your disk.
+UUID="ab549b39-9b1c-422f-bb92-6070379e9f50"
+
+# The LUKS volume slug you want to use, which will result in the
+# partition being mounted to /dev/mapper/CHANGEME.
+VOLUME="LinuxCrypt"
+
+# Any rootflags you wish to set.
+ROOTFLAGS="subvol=/ubuntu-lts/@"
+
+# Our kernels.
+KERNELS=()
+FIND="find /boot -maxdepth 1 -name 'vmlinuz-*' -type f -print0 | sort -rz"
+while IFS= read -r -u3 -d $'\0' LINE; do
+    KERNEL=$(basename "${LINE}")
+    KERNELS+=("${KERNEL:8}")
+done 3< <(eval "${FIND}")
+
+# There has to be at least one kernel.
+if [ ${#KERNELS[@]} -lt 1 ]; then
+    echo -e "\e[2msystemd-boot\e[0m \e[1;31mNo kernels found.\e[0m"
+    exit 1
+fi
+
+## Perform a nuclear clean to ensure everything is always in perfect sync.
+# rm /boot/efi/loader/entries/*.conf
+# rm -rf /boot/efi/ubuntu
+# mkdir /boot/efi/ubuntu
+
+# Copy the latest kernel files to a consistent place so we can keep
+# using the same loader configuration.
+LATEST="${KERNELS[@]:0:1}"
+echo -e "\e[2msystemd-boot\e[0m \e[1;32m${LATEST}\e[0m"
+for FILE in config initrd.img System.map vmlinuz; do
+    cp "/boot/${FILE}-${LATEST}" "/boot/efi/EFI/Ubuntu-LTS/${FILE}"
+    cat << EOF > /boot/efi/loader/entries/Ubuntu-LTS-latest.conf
+title   Ubuntu LTS ${LATEST} (latest)
+linux   /EFI/Ubuntu-LTS/vmlinuz
+initrd  /EFI/Ubuntu-LTS/initrd.img
+options cryptdevice=UUID=${UUID}:${VOLUME} root=/dev/mapper/${VOLUME} ro quiet splash rootflags=${ROOTFLAGS}
+EOF
+done
+
+# Copy any legacy kernels over too, but maintain their version-based
+# names to avoid collisions.
+if [ ${#KERNELS[@]} -gt 1 ]; then
+    LEGACY=("${KERNELS[@]:1}")
+    for VERSION in "${LEGACY[@]}"; do
+        echo -e "\e[2msystemd-boot\e[0m \e[1;32m${VERSION}\e[0m"
+        for FILE in config initrd.img System.map vmlinuz; do
+            cp "/boot/${FILE}-${VERSION}" "/boot/efi/EFI/Ubuntu-LTS/${FILE}-${VERSION}"
+            cat << EOF > /boot/efi/loader/entries/Ubuntu-LTS-legacy.conf
+title   Ubuntu LTS ${VERSION}
+linux   /EFI/Ubuntu-LTS/vmlinuz-${VERSION}
+initrd  /EFI/Ubuntu-LTS/initrd.img-${VERSION}
+options cryptdevice=UUID=${UUID}:${VOLUME} root=/dev/mapper/${VOLUME} ro quiet splash rootflags=${ROOTFLAGS}
+EOF
+        done
+    done
+fi
+
+# Success!
+exit 0
