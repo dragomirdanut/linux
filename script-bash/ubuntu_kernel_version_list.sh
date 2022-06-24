@@ -6,11 +6,11 @@ FIND="find /boot -maxdepth 1 -name 'vmlinuz-*' -type f -not -name '*.dpkg-tmp' -
 # FIND="find /boot -maxdepth 1 -name 'vmlinuz-*' -type f -not -name '*.dpkg-tmp' -print0"
 while IFS= read -r -u3 -d $'\0' LINE; do
     # echo ". LINE = ${LINE}"       # LINE     = /boot/vmlinuz-5.15.0-35-generic
-    KERNEL=$(basename "${LINE}")  # KERNEL   = vmlinuz-5.15.0-35-generic
-    KERNEL_VERSION_LIST+=("${KERNEL:8}")      # KERNEL:8 = 5.15.0-37-generic
+    KERNEL=$(basename "${LINE}")    # KERNEL   = vmlinuz-5.15.0-35-generic
+    KERNEL_VERSION_LIST+=("${KERNEL:8}")      # KERNEL:8 = cut prefix = 5.15.0-37-generic
 done 3< <(eval "${FIND}")
 
-echo "KERNEL_VERSION_LIST = ${KERNEL_VERSION_LIST[@]}"
+echo "KERNEL_VERSION_LIST = ( ${KERNEL_VERSION_LIST[@]} )"
 # KERNEL_VERSION_LIST = ( 5.15.0-35-generic 5.15.0-37-generic )
 
 
