@@ -32,17 +32,23 @@ fi
 # rm /boot/efi/loader/entries/*.conf
 # rm -rf /boot/efi/ubuntu
 # mkdir /boot/efi/ubuntu
+#
+# rm /boot/efi/loader/entries/Ubuntu-LTS-latest.conf
+# rm /boot/efi/loader/entries/Ubuntu-LTS-legacy.conf
+#
+rm -rf /boot/efi/EFI/Ubuntu-LTS/
+mkdir /boot/efi/EFI/Ubuntu-LTS/
 
 # Copy the latest kernel files to a consistent place so we can keep
 # using the same loader configuration.
-LATEST="${KERNELS[@]:0:1}"
-echo -e "\e[2msystemd-boot\e[0m \e[1;32m${LATEST}\e[0m"
+LATEST_VERSION="${KERNELS[@]:0:1}"
+echo -e "\e[2msystemd-boot\e[0m \e[1;32m${LATEST_VERSION}\e[0m"
 for FILE in config initrd.img System.map vmlinuz; do
-    cp "/boot/${FILE}-${LATEST}" "/boot/efi/EFI/Ubuntu-LTS/${FILE}"
+    cp "/boot/${FILE}-${LATEST_VERSION}" "/boot/efi/EFI/Ubuntu-LTS/${FILE}-${LATEST_VERSION}"
     cat << EOF > /boot/efi/loader/entries/Ubuntu-LTS-latest.conf
-title   Ubuntu LTS ${LATEST} (latest)
-linux   /EFI/Ubuntu-LTS/vmlinuz
-initrd  /EFI/Ubuntu-LTS/initrd.img
+title   Ubuntu LTS ${LATEST_VERSION} (latest)
+linux   /EFI/Ubuntu-LTS/vmlinuz-${LATEST_VERSION}
+initrd  /EFI/Ubuntu-LTS/initrd.img-${LATEST_VERSION}
 options cryptdevice=UUID=${UUID}:${VOLUME} root=/dev/mapper/${VOLUME} ro quiet splash rootflags=${ROOTFLAGS}
 EOF
 done
@@ -50,15 +56,15 @@ done
 # Copy any legacy kernels over too, but maintain their version-based
 # names to avoid collisions.
 if [ ${#KERNELS[@]} -gt 1 ]; then
-    LEGACY=("${KERNELS[@]:1}")
-    for VERSION in "${LEGACY[@]}"; do
-        echo -e "\e[2msystemd-boot\e[0m \e[1;32m${VERSION}\e[0m"
+    LEGACY_LIST=("${KERNELS[@]:1}")
+    for LEGACY_VERSION in "${LEGACY_LIST[@]}"; do
+        echo -e "\e[2msystemd-boot\e[0m \e[1;32m${LEGACY_VERSION}\e[0m"
         for FILE in config initrd.img System.map vmlinuz; do
-            cp "/boot/${FILE}-${VERSION}" "/boot/efi/EFI/Ubuntu-LTS/${FILE}-${VERSION}"
+            cp "/boot/${FILE}-${LEGACY_VERSION}" "/boot/efi/EFI/Ubuntu-LTS/${FILE}-${LEGACY_VERSION}"
             cat << EOF > /boot/efi/loader/entries/Ubuntu-LTS-legacy.conf
-title   Ubuntu LTS ${VERSION}
-linux   /EFI/Ubuntu-LTS/vmlinuz-${VERSION}
-initrd  /EFI/Ubuntu-LTS/initrd.img-${VERSION}
+title   Ubuntu LTS ${LEGACY_VERSION}
+linux   /EFI/Ubuntu-LTS/vmlinuz-${LEGACY_VERSION}
+initrd  /EFI/Ubuntu-LTS/initrd.img-${LEGACY_VERSION}
 options cryptdevice=UUID=${UUID}:${VOLUME} root=/dev/mapper/${VOLUME} ro quiet splash rootflags=${ROOTFLAGS}
 EOF
         done
