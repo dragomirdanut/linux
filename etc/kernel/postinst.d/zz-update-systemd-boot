@@ -4,15 +4,32 @@
 # whenever kernels are added or removed.
 #
 
+LINUX_TITLE="CHANGEME"
+# Ex: "Ubuntu LTS"
+# Title for boot OS
+
+LINUX_TITLE_DIR="CHANGEME"
+# Ex: "ubuntu-lts"
+# Same as BTRFS subvolume dir: /ubuntu-lts/@
+# /efi/loader/entries/ubuntu-lts-latest.conf (& */ubuntu-lts-legacy.conf)
+
 # The UUID of your disk.
+# If is your LUKS on BTRFS select crypto_LUKS UUID
 UUID="CHANGEME"
+# Ex: "ab549b39-9b1c-422f-bb92-6070379e9f50"
 
 # The LUKS volume slug you want to use, which will result in the
 # partition being mounted to /dev/mapper/CHANGEME.
-VOLUME="LinuxCrypt"
+VOLUME="CHANGEME"
+# Ex: "LinuxCrypt" (from /dev/mapper/LinuxCrypt)
 
 # Any rootflags you wish to set.
-ROOTFLAGS="subvol=/ubuntu-lts/@"
+# ROOTFLAGS="CHANGEME"
+ROOTFLAGS="subvol=/${LINUX_TITLE_DIR}/@"
+# Ex: "subvol=/${LINUX_TITLE_DIR}/@"  =>  "subvol=/ubuntu-lts/@"
+
+
+
 
 # Our kernels.
 KERNELS=()
@@ -28,27 +45,19 @@ if [ ${#KERNELS[@]} -lt 1 ]; then
     exit 1
 fi
 
-## Perform a nuclear clean to ensure everything is always in perfect sync.
-# rm /boot/efi/loader/entries/*.conf
-# rm -rf /boot/efi/ubuntu
-# mkdir /boot/efi/ubuntu
-#
-# rm /boot/efi/loader/entries/Ubuntu-LTS-latest.conf
-# rm /boot/efi/loader/entries/Ubuntu-LTS-legacy.conf
-#
-rm -rf /boot/efi/EFI/Ubuntu-LTS/
-mkdir /boot/efi/EFI/Ubuntu-LTS/
+rm -rf /boot/efi/EFI/${LINUX_TITLE_DIR}/
+mkdir /boot/efi/EFI/${LINUX_TITLE_DIR}/
 
 # Copy the latest kernel files to a consistent place so we can keep
 # using the same loader configuration.
 LATEST_VERSION="${KERNELS[@]:0:1}"
 echo -e "\e[2msystemd-boot\e[0m \e[1;32m${LATEST_VERSION}\e[0m"
 for FILE in config initrd.img System.map vmlinuz; do
-    cp "/boot/${FILE}-${LATEST_VERSION}" "/boot/efi/EFI/Ubuntu-LTS/${FILE}-${LATEST_VERSION}"
-    cat << EOF > /boot/efi/loader/entries/Ubuntu-LTS-latest.conf
-title   Ubuntu LTS ${LATEST_VERSION} (latest)
-linux   /EFI/Ubuntu-LTS/vmlinuz-${LATEST_VERSION}
-initrd  /EFI/Ubuntu-LTS/initrd.img-${LATEST_VERSION}
+    cp "/boot/${FILE}-${LATEST_VERSION}" "/boot/efi/EFI/${LINUX_TITLE_DIR}/${FILE}-${LATEST_VERSION}"
+    cat << EOF > /boot/efi/loader/entries/${LINUX_TITLE_DIR}-latest.conf
+title   ${LINUX_TITLE} ${LATEST_VERSION} (latest)
+linux   /EFI/${LINUX_TITLE_DIR}/vmlinuz-${LATEST_VERSION}
+initrd  /EFI/${LINUX_TITLE_DIR}/initrd.img-${LATEST_VERSION}
 options cryptdevice=UUID=${UUID}:${VOLUME} root=/dev/mapper/${VOLUME} ro quiet splash rootflags=${ROOTFLAGS}
 EOF
 done
@@ -60,11 +69,11 @@ if [ ${#KERNELS[@]} -gt 1 ]; then
     for LEGACY_VERSION in "${LEGACY_LIST[@]}"; do
         echo -e "\e[2msystemd-boot\e[0m \e[1;32m${LEGACY_VERSION}\e[0m"
         for FILE in config initrd.img System.map vmlinuz; do
-            cp "/boot/${FILE}-${LEGACY_VERSION}" "/boot/efi/EFI/Ubuntu-LTS/${FILE}-${LEGACY_VERSION}"
-            cat << EOF > /boot/efi/loader/entries/Ubuntu-LTS-legacy.conf
-title   Ubuntu LTS ${LEGACY_VERSION}
-linux   /EFI/Ubuntu-LTS/vmlinuz-${LEGACY_VERSION}
-initrd  /EFI/Ubuntu-LTS/initrd.img-${LEGACY_VERSION}
+            cp "/boot/${FILE}-${LEGACY_VERSION}" "/boot/efi/EFI/${LINUX_TITLE_DIR}/${FILE}-${LEGACY_VERSION}"
+            cat << EOF > /boot/efi/loader/entries/${LINUX_TITLE_DIR}-legacy.conf
+title   ${LINUX_TITLE} ${LEGACY_VERSION}
+linux   /EFI/${LINUX_TITLE_DIR}/vmlinuz-${LEGACY_VERSION}
+initrd  /EFI/${LINUX_TITLE_DIR}/initrd.img-${LEGACY_VERSION}
 options cryptdevice=UUID=${UUID}:${VOLUME} root=/dev/mapper/${VOLUME} ro quiet splash rootflags=${ROOTFLAGS}
 EOF
         done
