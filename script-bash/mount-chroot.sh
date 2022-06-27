@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# mount-and-chroot /source /target mount_options
-# mount-and-chroot /dev/sda3 /mnt/ubuntu1 subvol=/ubuntu/@,ssd,noatime,space_cache=v2,commit=120,compress=zstd,autodefrag
+# ./mount-and-chroot /source /target mount_options
+# ./mount-and-chroot /dev/sda3 /mnt/ubuntu1 subvol=/ubuntu/@,ssd,noatime,space_cache=v2,commit=120,compress=zstd,autodefrag
 
 clear
 
@@ -35,47 +35,58 @@ if [[ $# -le 2 ]]; then
 	exit 0
 fi
 
-src_dev=$1
-target_dir=$2
-mnt_params=$3
+SRC_DEV=$1
+TARGET_DIR=$2
+MNT_PARAMS=$3
 
 # CONDITION: if not contain 'subvolid' then you can use 'subvol'
-mnt_params_danut_default="subvol=${target_dir}/@,ssd,noatime,space_cache=v2,commit=120,compress=zstd,discard=async,autodefrag"
+MNT_PARAMS_DANUT_DEFAULT="subvol=${TARGET_DIR}/@,ssd,noatime,space_cache=v2,commit=120,compress=zstd,discard=async,autodefrag"
 
-echo -e "Source to mount device: \"${src_dev}\""
-echo -e "Target directory: \"${target_dir}\""
-echo -e "Mount parameters: \"${mnt_params}\""
+echo -e "Source to mount device: \"${SRC_DEV}\""   # /dev/mapper/LinuxCrypt
+echo -e "Target directory: \"${TARGET_DIR}\""      # /mnt/ubuntu-lts
+echo -e "Mount parameters: \"${MNT_PARAMS}\""      # subvolid=5  or  subvol=/ubuntu-lts/@
 echo ""
 
-if [[ -e ${target_dir} ]]; then
-	# target_dir="/mnt/ubuntu1"
-	# echo "Target directory exists, generate an alternative directory ${target_dir} (TEMPORARY)"
-	echo "Directory exists. Exit."
-	exit 0  # tmp ?
+if [[ -e ${TARGET_DIR} ]]; then
+	# TARGET_DIR="/mnt/ubuntu1"
+	# echo "Target directory exists, generate an alternative directory ${TARGET_DIR} (TEMPORARY)"
+	
+	echo "Directory exists."
+	# echo "Directory exists. Exit."
+	# exit 0  # tmp ?
 else
-	echo "Directory does not exists. Creating a new directory ${target_dir}"
-	sudo mkdir -pv ${target_dir}
+	echo "Directory does not exists. Creating a new directory ${TARGET_DIR}"
+	sudo mkdir -pv ${TARGET_DIR}
 fi
-echo -e "Final target directory is: \"${target_dir}\""
+echo -e "Final, target directory is: \"${TARGET_DIR}\""
 
-echo -e "Mounting device ${src_dev} with parameters: ${mnt_params}"
-echo -e ">> sudo mount -v ${src_dev} ${target_dir} -o ${mnt_params}"
-sudo mount -v ${src_dev} ${target_dir} -o ${mnt_params}
+echo -e "Preparing for mount device ${SRC_DEV} with parameters: ${MNT_PARAMS}"
+if [[ $(findmnt -M ${TARGET_DIR}) ]]; then
+	echo "Already mounted."
+else
+	echo -e ">> Mounting... sudo mount -v ${SRC_DEV} ${TARGET_DIR} -o ${MNT_PARAMS}"
+	sudo mount -v ${SRC_DEV} ${TARGET_DIR} -o ${MNT_PARAMS}
+fi
 
-# If mnt_params contain "subvolid" = skip below! exit 0 (no error)
-if [[ $mnt_params =~ "subvolid" ]]; then
-	echo -e "Done. (shorter for subvolid)"
+# If MNT_PARAMS contain "subvolid" = skip below! exit 0 (no error)
+if [[ $MNT_PARAMS =~ "subvolid" ]]; then
+	echo -e "Done. (shorter for BTRFS subvolid)"
 	exit 0
 fi
 
 for i in /dev /dev/pts /proc /run /sys /sys/firmware/efi/efivars; 
 do
-	echo " >> sudo mount -B  $i  ${target_dir}  => to:  ${target_dir}$i"
-	sudo mount -B $i ${target_dir}$i
+	# echo "Checking for already mount..."
+	# if [[ $(findmnt -M ${TARGET_DIR}) ]]; then
+		# echo "Already mounted."
+	# else
+		# echo "Not mounted.  >> sudo mount -B  $i  ${TARGET_DIR}  => to:  ${TARGET_DIR}$i"
+		sudo mount -vB $i ${TARGET_DIR}$i
+	# fi
 done
 echo -e "Done."
 
-echo -e "chroot ${target_dir} ..."
-sudo chroot ${target_dir}
+echo -e "chroot ${TARGET_DIR} ..."
+sudo chroot ${TARGET_DIR}
 
 echo -e "Done."
