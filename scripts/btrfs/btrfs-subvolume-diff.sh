@@ -10,7 +10,7 @@
 # btrfs send is the best way to do this long term, but as of kernel
 # 3.14, btrfs send cannot just send a list of changed files without
 # scanning and sending all the changed data blocks along.
-
+#
 usage() { echo $@ >&2; echo "Usage: $0 <older-snapshot> <newer-snapshot>" >&2; exit 1; }
 
 [ $# -eq 2 ] || usage "Incorrect invocation";
