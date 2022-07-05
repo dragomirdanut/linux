@@ -24,6 +24,7 @@ sudo apt install -y \
 	# Build essentials
 	dkms build-essential linux-headers-$(uname -r) cmake \
 	os-prober \
+	# Networking
 	curl wget httpie apt-transport-https gnupg \
 	net-tools \
 	autossh openvpn \
