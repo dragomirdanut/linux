@@ -1,0 +1,34 @@
+# ~/.gitconfig
+
+# User as default, personal = dragomirdanut
+[user]
+	name = Danut
+	email = dragomirdanut@gmail.com
+
+[github]
+	user = dragomirdanut
+
+# Multiple accounts
+[includeIf "gitdir:~/.gitconfig_dragomirdanut/"]
+	path = ~/.gitconfig_dragomirdanut/.gitconfig_dragomirdanut
+	# path = .gitconfig_dragomirdanut
+
+[includeIf "gitdir:~/.gitconfig_dan-ioan-dragomir/"]
+	path = ~/.gitconfig_dan-ioan-dragomir/.gitconfig_dan-ioan-dragomir
+	# path = .gitconfig_dan-ioan-dragomir
+
+[includeIf "gitdir:~/.gitconfig_dan-ioan-dragomir-visma/"]
+	path = ~/.gitconfig_dan-ioan-dragomir-visma/.gitconfig_dan-ioan-dragomir-visma
+	# path = .gitconfig_dan-ioan-dragomir-visma
+
+[core]
+	excludesfile = ~/.gitignore
+
+#
+# [user]
+#	name = dragomirdanut
+#	email = dragomirdanut@gmail.com
+# [github]
+#	user = dragomirdanut
+#	token = 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
+#

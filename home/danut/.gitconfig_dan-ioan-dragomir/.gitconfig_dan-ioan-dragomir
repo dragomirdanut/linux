@@ -1,0 +1,9 @@
+# .gitconfig_dan-ioan-dragomir/.gitconfig_dan-ioan-dragomir
+[user]
+	name = Dan Dragomir
+	email = deepspace77@gmail.com
+[github]
+	user = dan-ioan-dragomir
+[core]
+	sshCommand = "ssh -i ~/.ssh/dan-ioan-dragomir"
+	# sshCommand = ssh -i ~/.ssh/dan-ioan-dragomir
