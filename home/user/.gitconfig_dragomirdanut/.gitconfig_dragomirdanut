@@ -1,4 +1,5 @@
 # .gitconfig_dragomirdanut/.gitconfig_dragomirdanut
+
 [user]
 	name = Danut
 	email = dragomirdanut@gmail.com
@@ -6,4 +7,3 @@
 	user = dragomirdanut
 [core]
 	sshCommand = "ssh -i ~/.ssh/dragomirdanut"
-	# sshCommand = ssh -i ~/.ssh/dragomirdanut

@@ -1,9 +1,9 @@
 # .gitconfig_dan-ioan-dragomir-visma/.gitconfig_dan-ioan-dragomir-visma
+
 [user]
 	name = Dan Ioan Dragomir
 	email = dan.ioan.dragomir@visma.com
 [github]
 	user = dan-ioan-dragomir-visma
 [core]
-	# sshCommand = "ssh -i ~/.ssh/dan-ioan-dragomir-visma"
-	sshCommand = ssh -i ~/.ssh/dan-ioan-dragomir-visma
+	sshCommand = "ssh -i ~/.ssh/dan-ioan-dragomir-visma"
