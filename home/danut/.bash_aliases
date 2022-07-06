@@ -28,10 +28,15 @@ alias cd..='cd ..'
 ## Clear the screen. Or just Ctrl + L
 alias c='clear'
 
-alias ll='ls -alF'
+alias cat='bat'
+
+# alias ll='ls -alF'
+# covered because ll = exa occuiped
+alias l='ls -alF'
 alias lt='ls --human-readable --size -1 -S --classify'
 ## MacOS / BSD
 # alias lt='du -sh * | sort -h'
+alias ll='exa -alF'
 
 alias gh='history | grep '
 alias hg='history | grep '
