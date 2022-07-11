@@ -11,13 +11,17 @@
 
 # GitHub multiple accounts - on your Workspaces
 [includeIf "gitdir:~/Projects/dragomirdanut/"]
-	path = ~/.gitconfig_dragomirdanut/.gitconfig
+	path = ~/.gitconfig_dragomirdanut_github/.gitconfig
 
 [includeIf "gitdir:~/Projects/dan-ioan-dragomir/"]
-	path = ~/.gitconfig_dan-ioan-dragomir/.gitconfig
+	path = ~/.gitconfig_dan-ioan-dragomir_github/.gitconfig
 
 [includeIf "gitdir:~/Projects/dan-ioan-dragomir-visma/"]
-	path = ~/.gitconfig_dan-ioan-dragomir-visma/.gitconfig
+	path = ~/.gitconfig_dan-ioan-dragomir-visma_github/.gitconfig
 
 [core]
 	excludesfile = ~/.gitignore
+[credential]
+	helper = store
+[cola]
+	spellcheck = false
