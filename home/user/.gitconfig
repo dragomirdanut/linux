@@ -16,9 +16,6 @@
 [includeIf "gitdir:~/Projects/dan-ioan-dragomir/"]
 	path = ~/.gitconfig_dan-ioan-dragomir_github/.gitconfig
 
-[includeIf "gitdir:~/Projects/dan-ioan-dragomir-visma/"]
-	path = ~/.gitconfig_dan-ioan-dragomir-visma_github/.gitconfig
-
 [core]
 	excludesfile = ~/.gitignore
 [credential]
