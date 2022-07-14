@@ -1,0 +1,86 @@
+ZSH
+
+curl, git
+fonts-poverline
+
+
+zsh
+	sudo apt install zsh
+
+
+oh my zsh
+	https://ohmyz.sh/
+	sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+	2 = save .zshrc and exit
+
+
+https://github.com/ibnyusrat/my-linux-setup
+	See: https://github.com/ibnYusrat/my-linux-setup/tree/master/powerline-fonts
+
+	git clone https://github.com/ibnyusrat/my-linux-setup
+	mkdir ~/.fonts
+	cd my-linux-setup/powerline-fonts
+	cp * ~/.fonts
+	sudo apt install gnome-tweaks
+	open GNOME Tweaks
+		Fonts > Monospace Text - 
+					Default:    Pop!OS= Fira Mono Regular, 11
+					Change to:  MesloLGS NF Regular, 11
+						(if you want Bold or Italic ...)
+	Exit terminal (restart)
+
+
+poverlevel10k
+	https://github.com/romkatv/powerlevel10k
+	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+
+	nano .zshrc
+	ZSH_THEME="powerlevel10k/powerlevel10k"
+
+restart your terminal
+rest you setting up ;-)
+	...
+	Prompt Style
+		2 - Classic		++	<-- parca aici e mai bine
+		3 - Rainbow		+++
+		4 - Pure		+
+	Character Set
+		1 - Unicode		++
+		2 - ASCII		+
+	Show current time
+		1 - No.				++
+		2 - 24-hour format	+++
+	Prompt Separators
+		3 - Slanted
+	Prompt Heads
+		1 - Sharp
+	Prompt Tails
+		1 - Flat
+	Prompt Height
+		1 - One line 	++
+		2 - Two lines 	+++
+	Prompt Connection
+		1 - Disconnected
+	Prompt Frame
+		1 - No frame
+	Prompt Spacing
+		1 - Compact		+ poate ...
+		2 - Sparse		+++
+	Icons
+		1 - Few icons 	+
+		2 - Many icons 	+++
+	Prompt flow
+		1 - Concise
+		2 - Fluent
+	Enable Transient Prompt?
+		y - Yes (together)	+++
+		n - No (separates)  ?
+	Instant Prompt Mode
+		1 - Verbose (recommended)  +
+		2 - Quiet
+		3 - Off
+	Apply changes to ~/.zshrc ?
+		y - Yes
+		n - No
+	DONE !
+
