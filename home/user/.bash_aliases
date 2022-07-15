@@ -100,6 +100,7 @@ alias update='sudo apt update && sudo apt upgrade'
 # alias poweroff='sudo /sbin/poweroff'
 # alias halt='sudo /sbin/halt'
 # alias shutdown='sudo /sbin/shutdown'
+# alias shotdown='sudo shutdown now'
 
 alias ports='netstat -tulanp'
 
@@ -136,3 +137,22 @@ alias psg='ps auwx | grep '
 ## ODP projects
 alias tail_domain1='tail -f -n1000 $HOME/data/project/danut/payara5/glassfish/domains/domain1/logs/server.log'
 alias tail_admincore='tail -f -n1000 $HOME/data/project/danut/payara5/glassfish/domains/admincore/logs/server.log'
+
+# Folders
+alias h='cd ~/'
+alias dow='cd ~/Downloads'
+alias doc='cd ~/Documents'
+alias prj='cd ~/Projects'
+alias proj='cd ~/Projects'
+
+alias df='df -h'
+alias free='free -g'
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+
+alias memhogs='ps axh -o cmd:15,%mem --sort=-%mem | head'
+alias cpuhogs='ps axh -o cmd:15,%cpu --sort=-%cpu | head'
+alias resolution='xrandr | grep \* | sed 's/59.95\*+//g''
+# alias hdd="df -h /home | grep /dev | awk '{print $3 "/" $5}'"
+# alias avail="df -h /home | grep /dev/ | awk '{print $4}'"
