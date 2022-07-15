@@ -8,7 +8,7 @@ zsh
 	sudo apt install zsh
 	sudo apt --purge remove zsh
 	zsh
-	2 = save .zshrc and exit (Populate your ~/.zshrc with the configuration recommended ...)
+		2 = save .zshrc and exit (Populate your ~/.zshrc with the configuration recommended ...)
 
 	Restart your terminal
 
@@ -32,6 +32,8 @@ powerline-fonts
 					Default:    Pop!OS= Fira Mono Regular, 11
 					Change to:  MesloLGS NF Regular, 11
 						(if you want Bold or Italic ...)
+	Your terminal: tillix select font, too.
+
 	Restart your terminal
 
 
